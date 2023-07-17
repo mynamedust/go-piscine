@@ -1,0 +1,54 @@
+<recipes>
+  <cake>
+    <name>Blueberry Muffin Cake</name>
+    <stovetime>40 min</stovetime>
+    <ingredients>
+      <item>
+        <itemname>Flour</itemname>
+        <itemcount>2</itemcount>
+        <itemunit>cups</itemunit>
+      </item>
+      <item>
+        <itemname>Sugar</itemname>
+        <itemcount>1</itemcount>
+        <itemunit>cups</itemunit>
+      </item>
+      <item>
+        <itemname>Blueberries</itemname>
+        <itemcount>1.5</itemcount>
+        <itemunit>cups</itemunit>
+      </item>
+    </ingredients>
+  </cake>
+  <cake>
+    <name>Red Velvet Strawberry Cake</name>
+    <stovetime>40 min</stovetime>
+    <ingredients>
+      <item>
+        <itemname>Flour</itemname>
+        <itemcount>2</itemcount>
+        <itemunit>cups</itemunit>
+      </item>
+      <item>
+        <itemname>Sugar</itemname>
+        <itemcount>1.5</itemcount>
+        <itemunit>cups</itemunit>
+      </item>
+      <item>
+        <itemname>Vanilla extract</itemname>
+        <itemcount>1</itemcount>
+        <itemunit>tablespoons</itemunit>
+      </item>
+      <item>
+        <itemname>Cocoa powder</itemname>
+        <itemcount>2</itemcount>
+        <itemunit>tablespoons</itemunit>
+      </item>
+      <item>
+        <itemname>Strawberries</itemname>
+        <itemcount>1.5</itemcount>
+        <itemunit>cups</itemunit>
+      </item>
+    </ingredients>
+  </cake>
+</recipes>
