@@ -8,6 +8,7 @@ import (
 	"path/filepath"
 	"strings"
 	"sync"
+	"unicode/utf8"
 )
 
 func main() {
@@ -69,16 +70,9 @@ func wordCounter(fileName string, wg *sync.WaitGroup) {
 	if data == nil {
 		return
 	}
-	words := strings.Split(string(data), " ")
-	fmt.Println(len(words))
-	for _, elem := range words {
-		if strings.Compare(elem, " ") != 0 {
-			fmt.Println(elem, "!=", elem != " ")
-			count++
-			count += strings.Count(elem, "\n")
-		}
-	}
-	fmt.Println(count)
+	words := strings.Fields(string(data))
+	count += len(words)
+	fmt.Println(count, "\t", fileName)
 }
 
 func lineCounter(fileName string, wg *sync.WaitGroup) {
@@ -96,13 +90,18 @@ func lineCounter(fileName string, wg *sync.WaitGroup) {
 			count++
 		}
 	}
-	fmt.Println(count)
+	fmt.Println(count, "\t", fileName)
 }
 
 func charCounter(fileName string, wg *sync.WaitGroup) {
+	var count int
 	defer wg.Done()
-	fmt.Println(fileName)
-	return
+	data := openRead(fileName)
+	if data == nil {
+		return
+	}
+	count = utf8.RuneCount(data)
+	fmt.Println(count, "\t", fileName)
 }
 
 func openRead(fileName string) []byte {
