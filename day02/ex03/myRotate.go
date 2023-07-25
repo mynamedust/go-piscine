@@ -1,8 +1,12 @@
 package main
 
 import (
+	"archive/tar"
+	"compress/gzip"
 	"flag"
 	"fmt"
+	"io"
+	"io/fs"
 	"os"
 	"path/filepath"
 	"strconv"
@@ -61,10 +65,20 @@ func archiveFile(dir, fileName string, wg *sync.WaitGroup) {
 	}
 	archiveName := createArchiveName(dir, fileName, stat.ModTime())
 	archive, err := os.Create(archiveName)
+	defer archive.Close()
 	if err != nil {
 		fmt.Println("Error. Archive creating failed.")
+		return
 	}
-	fmt.Println(archiveName)
+	gzipWriter := gzip.NewWriter(archive)
+	defer gzipWriter.Close()
+	tarWriter := tar.NewWriter(gzipWriter)
+	defer tarWriter.Close()
+	if err := addFileToArchive(tarWriter, stat, file, fileName); err != nil {
+		fmt.Println("Error. File adding failed.")
+		return
+	}
+	fmt.Println(fileName, "added to archive.")
 }
 
 func createArchiveName(dir, fileName string, mtime time.Time) string {
@@ -75,4 +89,21 @@ func createArchiveName(dir, fileName string, mtime time.Time) string {
 	name.WriteString(strconv.FormatInt(mtime.Unix(), 10))
 	name.WriteString(".tar.gz")
 	return name.String()
+}
+
+func addFileToArchive(tarWriter *tar.Writer, fileStat fs.FileInfo, file *os.File, fileName string) error {
+	header := &tar.Header{
+		Name:    filepath.Base(fileName),
+		Size:    fileStat.Size(),
+		Mode:    int64(fileStat.Mode().Perm()),
+		ModTime: fileStat.ModTime(),
+	}
+	if err := tarWriter.WriteHeader(header); err != nil {
+		return err
+	}
+	_, err := io.Copy(tarWriter, file)
+	if err != nil {
+		return err
+	}
+	return nil
 }
