@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io"
 	"os"
+	"github.com/elastic/go-elasticsearch/v8"
 )
 
 func main() {
@@ -25,7 +26,14 @@ func main() {
 			break
 		}
 	}
-	es, _ := elasticsearch.NewDefaultClient()
-	log.Println(elasticsearch.Version)
-	log.Println(es.Info())
+	cfg := elasticsearch.Config{
+        Addresses: []string{
+            "http://localhost:9200",
+        },
+	}
+	es, err := elasticsearch.NewClient(cfg)
+	if err != nil {
+  		fmt.Printf("Error creating the client: %s", err)
+	}
+	es.Get("places","1")
 }
