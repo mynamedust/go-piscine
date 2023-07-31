@@ -8,14 +8,15 @@ import (
 )
 
 type LocationType struct {
-	lat, lon float64
+	Lat float64 `json:"lat"`
+	Lon float64 `json:"lon"`
 }
 
 type RestaurantsType struct {
-	Name string		`json:"name,omitempty"`
-	Address string	`json:"address,omitempty"`
-	Phone string	`json:"phone,omitempty"`
-	Id int			`json:"id,omitempty"`
+	Name     string       `json:"name,omitempty"`
+	Address  string       `json:"address,omitempty"`
+	Phone    string       `json:"phone,omitempty"`
+	Id       int          `json:"id,omitempty"`
 	Location LocationType `json:"location,omitempty"`
 }
 
@@ -36,12 +37,12 @@ func ReadLine(r *csv.Reader) (*RestaurantsType, error) {
 	reustarant.Name = line[1]
 	reustarant.Address = line[2]
 	reustarant.Phone = line[3]
-	reustarant.Location.lon, err = strconv.ParseFloat(line[4], 64)
+	reustarant.Location.Lon, err = strconv.ParseFloat(line[4], 64)
 	if err != nil {
 		fmt.Println("error: float64 parsing failed: ", err)
 		return nil, err
 	}
-	reustarant.Location.lat, err = strconv.ParseFloat(line[5], 64)
+	reustarant.Location.Lat, err = strconv.ParseFloat(line[5], 64)
 	if err != nil {
 		fmt.Println("error: float64 parsing failed: ", err)
 		return nil, err
