@@ -12,9 +12,11 @@ type LocationType struct {
 }
 
 type RestaurantsType struct {
-	name, address, phone string
-	id                   int
-	location             LocationType
+	Name string		`json:"name,omitempty"`
+	Address string	`json:"address,omitempty"`
+	Phone string	`json:"phone,omitempty"`
+	Id int			`json:"id,omitempty"`
+	Location LocationType `json:"location,omitempty"`
 }
 
 func ReadLine(r *csv.Reader) (*RestaurantsType, error) {
@@ -26,20 +28,20 @@ func ReadLine(r *csv.Reader) (*RestaurantsType, error) {
 	} else if err == io.EOF {
 		return nil, err
 	}
-	reustarant.id, err = strconv.Atoi(line[0])
+	reustarant.Id, err = strconv.Atoi(line[0])
 	if err != nil {
 		fmt.Println("error: atoi failed: ", err)
 		return nil, err
 	}
-	reustarant.name = line[1]
-	reustarant.address = line[2]
-	reustarant.phone = line[3]
-	reustarant.location.lon, err = strconv.ParseFloat(line[4], 64)
+	reustarant.Name = line[1]
+	reustarant.Address = line[2]
+	reustarant.Phone = line[3]
+	reustarant.Location.lon, err = strconv.ParseFloat(line[4], 64)
 	if err != nil {
 		fmt.Println("error: float64 parsing failed: ", err)
 		return nil, err
 	}
-	reustarant.location.lat, err = strconv.ParseFloat(line[5], 64)
+	reustarant.Location.lat, err = strconv.ParseFloat(line[5], 64)
 	if err != nil {
 		fmt.Println("error: float64 parsing failed: ", err)
 		return nil, err
