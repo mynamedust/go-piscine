@@ -1,4 +1,4 @@
-module day03ex02
+module day03/ex00
 
 go 1.20
 
