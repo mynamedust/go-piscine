@@ -1,50 +1,30 @@
 package db
 
 import (
-	"day03/ex01/types"
-	"encoding/json"
+	"fmt"
 	"github.com/elastic/go-elasticsearch/v8"
-	"strings"
 )
 
 type ElasticStore struct {
 	esClient *elasticsearch.Client
 }
 
-func NewElasticStore(esClient *elasticsearch.Client) *ElasticStore {
-	return &ElasticStore{esClient: esClient}
-}
-
-func (es *ElasticStore) GetPlaces(limit int, offset int) (places []types.Place, count int, err error) {
-	var response types.Response
-	res, err := es.esClient.Search(es.esClient.Search.WithBody(strings.NewReader(`{
-		"from": 5,
-		"size": 20,
-		"query": {
-			"match": {
-				"_index": "places"
-			}
+func CreateClient() (*elasticsearch.Client, error) {
+	cfg := elasticsearch.Config{
+		Addresses: []string{
+			"http://localhost:9200",
 		},
-		"aggs": {
-			"total_count": {
-				"value_count": {
-					"field": "_id"
-				}
-			}
-		}
-	}`)),
-		es.esClient.Search.WithPretty(),
-	)
-	defer res.Body.Close()
+	}
+	es, err := elasticsearch.NewClient(cfg)
 	if err != nil {
-		return nil, 0, err
+		fmt.Printf("error: client creating failed: %s\n", err)
+		return nil, err
 	}
-	if err := json.NewDecoder(res.Body).Decode(&response); err != nil {
-		return nil, 0, err
+	_, err = es.Info()
+	if err != nil {
+		fmt.Println("error: client.Info(); connection failed: ", err)
+		return nil, err
 	}
-	for _, hit := range response.Hits.Hits {
-		places = append(places, hit.Source)
-	}
-	count = int(response.Aggregations.TotalCount.Value)
-	return
+	fmt.Printf("elasticsearch: client connected %s\n", cfg.Addresses[0])
+	return es, err
 }
