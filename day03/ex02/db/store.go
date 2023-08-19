@@ -1,7 +1,7 @@
 package db
 
 import (
-	"day03/ex01/types"
+	"day03/ex02/types"
 	"encoding/json"
 	"github.com/elastic/go-elasticsearch/v8"
 	"strconv"
