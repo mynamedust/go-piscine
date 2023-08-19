@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Places List</title>
+</head>
+<body>
+    <h1>Places List</h1>
+    <p>Total: {{.TotalCount}}</p>
+    <ul>
+        {{range .Places}}
+        <li>
+            <strong>{{.Name}}</strong><br>
+            {{.Address}}<br>
+            {{.Phone}}
+        </li>
+        {{end}}
+    </ul>
+    {{if .HasPrevious}}
+    <a href="?page={{.PreviousPage}}">Previous</a>
+    {{end}}
+    {{if .HasNext}}
+    <a href="?page={{.NextPage}}">Next</a>
+    <a href="?page={{.LastPage}}">Last</a>
+    {{end}}
+</body>
+</html>
